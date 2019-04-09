@@ -18,7 +18,8 @@ router.get('/',function(req,res){
 });
 
 router.get('/awscognito', function(req,res){
-  lambda.cognito_module(req.query.id);
+  lambda.cognito_module(req.query.id,res);
+  res.send("Trying to access your lambda resource.")
   console.log(req.query);
 });
 
