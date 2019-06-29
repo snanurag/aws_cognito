@@ -1,7 +1,7 @@
 var AWS = require('aws-sdk');
 AWS.config.update({ region: 'eu-west-1' });
 
-function callLambdaFunction(res){
+function callLambdaFunction(){
     var lambda = new AWS.Lambda({ region: 'eu-west-1' });
 
     const startTime = new Date().getTime()
@@ -15,6 +15,7 @@ function callLambdaFunction(res){
         LogType: 'None',
         Payload: "{\"id\": \"test_"+i+ "\",\"age\": 1}"
       };
+      
       lambda.invoke(pullParams, function (error, data) {
         if (error) {
           console.log(error);
@@ -29,7 +30,7 @@ function callLambdaFunction(res){
     }
 }
 
-function signinCallback(googlAccessId,res) {
+function awsCredentialsCreation(googlAccessId) {
     // Add the Google access token to the Cognito credentials login map.
     AWS.config.credentials = new AWS.CognitoIdentityCredentials({
       IdentityPoolId: 'eu-west-1:b6d67f30-5b3d-4f4a-bcc3-3e93467bba22',
@@ -44,8 +45,8 @@ function signinCallback(googlAccessId,res) {
         console.error(err);
       else
         console.log("AWS credentials "+ AWS.config.credentials.accessKeyId);
-     callLambdaFunction(res);
+     callLambdaFunction();
     } ,);
 }
 
-exports.cognito_module = signinCallback;
+exports.aws_credential = awsCredentialsCreation;
